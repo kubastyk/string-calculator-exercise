@@ -2,9 +2,6 @@ import exceptions.IncorrectInputFormatException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -80,10 +77,9 @@ class CalculatorTest {
     @Test
     public void add_properlyDefinedCustomDelimiter_returnListOfNumbers() {
         int result = calculator.add("//aaa\n1aaa2aaa3");
-        int result2 = calculator.add("//.\n1.2.3");
+        int result2 = calculator.add("//,\n1,2,3");
         int result3 = calculator.add("// \n1 2 3");
         int result4 = calculator.add("//9\n19293");
-
 
         assertEquals(6, result);
         assertEquals(6, result2);
@@ -92,15 +88,24 @@ class CalculatorTest {
     }
 
     @Test
+    public void add_properlyDefinedCustomDelimiterSpecialChar_returnListOfNumbers() {
+        int result = calculator.add("//|\n1|2|3");
+
+        assertEquals(6, result);
+    }
+
+    @Test
     public void add_specialSignDelimiterNoMatch_throwException() {
-        assertThrows(NumberFormatException.class, () ->
+        var exception = assertThrows(NumberFormatException.class, () ->
                 calculator.add("//=\n1w2w3"));
+        assertEquals("‘=’ expected but ‘w’ found at position 1.", exception.getMessage());
     }
 
     @Test
     public void add_specialSignDelimiterOneMatch_throwException() {
-        assertThrows(NumberFormatException.class, () ->
-                calculator.add("//=\n1=2,3"));
+        var exception = assertThrows(NumberFormatException.class, () ->
+                calculator.add("//|\n1|2,3"));
+        assertEquals("‘|’ expected but ‘,’ found at position 3.", exception.getMessage());
     }
 
     @Test
