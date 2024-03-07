@@ -72,4 +72,16 @@ class CalculatorTest {
         int result = calculator.add("1,2\n3");
         assertEquals(6, result);
     }
+
+    @Test
+    public void add_notAllowCommaSeparatorAtTheEndOfString_throwNumberFormatException() {
+        assertThrows(NumberFormatException.class, () ->
+                calculator.add("1,2,"));
+    }
+
+    @Test
+    public void add_notAllowNewLineSeparatorAtTheEndOfString_throwNumberFormatException() {
+        assertThrows(NumberFormatException.class, () ->
+                calculator.add("1\n2\n"));
+    }
 }
