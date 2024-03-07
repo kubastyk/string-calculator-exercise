@@ -10,7 +10,7 @@ public class Calculator {
 
         String[] splitNumbers = numbers.split(",");
         result = Arrays.stream(splitNumbers)
-                .mapToInt(num -> Integer.parseInt(num))
+                .mapToInt(Integer::parseInt)
                 .reduce(0, Integer::sum);
 
         return result;
