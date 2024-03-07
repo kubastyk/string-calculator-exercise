@@ -1,3 +1,4 @@
+import exceptions.IncorrectInputFormatException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -75,13 +76,15 @@ class CalculatorTest {
 
     @Test
     public void add_notAllowCommaSeparatorAtTheEndOfString_throwNumberFormatException() {
-        assertThrows(NumberFormatException.class, () ->
+        var exception = assertThrows(IncorrectInputFormatException.class, () ->
                 calculator.add("1,2,"));
+        assertEquals("Input data cannot end with the separator", exception.getMessage());
     }
 
     @Test
     public void add_notAllowNewLineSeparatorAtTheEndOfString_throwNumberFormatException() {
-        assertThrows(NumberFormatException.class, () ->
+        var exception = assertThrows(IncorrectInputFormatException.class, () ->
                 calculator.add("1\n2\n"));
+        assertEquals("Input data cannot end with the separator", exception.getMessage());
     }
 }
