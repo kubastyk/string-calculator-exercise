@@ -1,11 +1,11 @@
 import exceptions.IncorrectInputFormatException;
+import services.CustomDelimiterService;
 import services.InputValidationService;
 
 import java.util.Arrays;
+import java.util.List;
 
 public class Calculator {
-
-    private static final String DEFAULT_DELIMITERS = ",|\n";
 
     public int add(String... args) {
         return Arrays.stream(args).mapToInt(this::add).sum();
@@ -19,10 +19,9 @@ public class Calculator {
                 return 0;
 
             InputValidationService.verifyIfInputEndsWithDelimiter(numbers);
+            List<Integer> splitNumbers = CustomDelimiterService.split(numbers);
 
-            String[] splitNumbers = numbers.split(DEFAULT_DELIMITERS);
-            result = Arrays.stream(splitNumbers)
-                    .mapToInt(Integer::parseInt)
+            result =splitNumbers.stream()
                     .reduce(0, Integer::sum);
         } catch (IncorrectInputFormatException e) {
             System.out.println(e.getMessage());
