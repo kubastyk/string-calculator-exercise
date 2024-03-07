@@ -14,16 +14,16 @@ public class CustomDelimiterService {
     private static final String DELIMITER_SUFFIX = "\n";
     private static final String ESCAPE_SPECIAL_CHAR = "\\";
 
-    public static List<Integer> split(String inut) throws IncorrectInputFormatException {
+    public static List<Integer> split(String input) throws IncorrectInputFormatException {
         String delimiter = DEFAULT_DELIMITERS;
-        if(inut.startsWith(DELIMITER_PREFIX) && inut.contains(DELIMITER_SUFFIX)) {
-            delimiter = getCustomDelimiter(inut);
-            inut = getInputWithoutCustomDelimiterDefinition(inut, delimiter);
+        if(input.startsWith(DELIMITER_PREFIX) && input.contains(DELIMITER_SUFFIX)) {
+            delimiter = getCustomDelimiter(input);
+            input = getInputWithoutCustomDelimiterDefinition(input, delimiter);
 
-            InputValidationService.validateInputWithCustomDelimiter(inut, delimiter);
+            InputValidationService.validateInputWithCustomDelimiter(input, delimiter);
         }
 
-        String[] numbers = splitWithDelimiter(inut, delimiter);
+        String[] numbers = splitWithDelimiter(input, delimiter);
         return Arrays.stream(numbers)
                     .mapToInt(Integer::parseInt)
                     .boxed()
