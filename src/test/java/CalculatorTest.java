@@ -60,4 +60,16 @@ class CalculatorTest {
         assertThrows(NumberFormatException.class, () ->
                 calculator.add("1,2", "3.4"));
     }
+
+    @Test
+    public void add_multipleValidNumbersWithNewLineSeparator_returnSum() {
+        int result = calculator.add("1\n2\n3");
+        assertEquals(6, result);
+    }
+
+    @Test
+    public void add_multipleValidNumbersWithNewLineAndCommaSeparator_returnSum() {
+        int result = calculator.add("1,2\n3");
+        assertEquals(6, result);
+    }
 }
