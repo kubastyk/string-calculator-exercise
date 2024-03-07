@@ -48,4 +48,16 @@ class CalculatorTest {
         assertThrows(NumberFormatException.class, () ->
                 calculator.add("AA,BB"));
     }
+
+    @Test
+    void add_multipleValidStringArguments_returnSumOfAllArguments() {
+        int result = calculator.add("1,2", "3,4", "5", "");
+        assertEquals(15, result);
+    }
+
+    @Test
+    public void add_multipleArgumentsWrongDelimiter_returnSumOfAllArguments() {
+        assertThrows(NumberFormatException.class, () ->
+                calculator.add("1,2", "3.4"));
+    }
 }
