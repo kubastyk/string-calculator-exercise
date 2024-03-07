@@ -1,5 +1,7 @@
 package services;
 
+import exceptions.IncorrectInputFormatException;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -12,28 +14,33 @@ public class CustomDelimiterService {
     private static final String DELIMITER_SUFFIX = "\n";
     private static final String ESCAPE_SPECIAL_CHAR = "\\";
 
-    public static List<Integer> split(String text) {
-        String[] numbersString = splitWithDelimiter(text);
+    public static List<Integer> split(String text) throws IncorrectInputFormatException {
+        String[] numbers = splitWithDelimiter(text);
 
-        return Arrays.stream(numbersString)
-                .mapToInt(Integer::parseInt)
-                .boxed()
-                .collect(toList());
+        return Arrays.stream(numbers)
+                    .mapToInt(Integer::parseInt)
+                    .boxed()
+                    .collect(toList());
     }
 
-    private static String[] splitWithDelimiter(String text) {
+    private static String[] splitWithDelimiter(String text) throws IncorrectInputFormatException {
         String delimiter = DEFAULT_DELIMITERS;
-        if(text.startsWith(DELIMITER_PREFIX)) {
+        if(text.startsWith(DELIMITER_PREFIX) && text.contains(DELIMITER_SUFFIX)) {
             delimiter = getCustomDelimiter(text);
             text = removeDefinitionOfCustomDelimiterFromTextBody(text, delimiter);
             if(delimiter.isEmpty())
                 delimiter = DEFAULT_DELIMITERS;
 
-            if(delimiter.length() == 1 && delimiter.matches("[^a-zA-Z0-9 ]"))
-                delimiter = ESCAPE_SPECIAL_CHAR + delimiter;
+            for (char chr : text.toCharArray()) {
+                if(!(Character.isDigit(chr) || chr == delimiter.charAt(0))) {
+                    System.out.println("Throw");
+                    throw new IncorrectInputFormatException("'" + delimiter + "' expected but '" + chr + "' found at position " + text.indexOf(chr) + ".");
+                }
+            }
         }
-
-        return text.split(delimiter);
+        String delimiterForSplit = delimiter.length() == 1 && delimiter.matches("[^a-zA-Z0-9 ]")
+                ? ESCAPE_SPECIAL_CHAR + delimiter : delimiter;
+        return text.split(delimiterForSplit);
     }
 
     private static String getCustomDelimiter(String str) {
