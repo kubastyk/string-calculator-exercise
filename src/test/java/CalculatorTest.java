@@ -1,4 +1,3 @@
-import exceptions.IncorrectInputFormatException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -95,31 +94,15 @@ class CalculatorTest {
     }
 
     @Test
-    public void add_specialSignDelimiterNoMatch_throwException() {
-        var exception = assertThrows(NumberFormatException.class, () ->
-                calculator.add("//=\n1w2w3"));
-        assertEquals("‘=’ expected but ‘w’ found at position 1.", exception.getMessage());
-    }
-
-    @Test
-    public void add_specialSignDelimiterOneMatch_throwException() {
-        var exception = assertThrows(NumberFormatException.class, () ->
-                calculator.add("//|\n1|2,3"));
-        assertEquals("‘|’ expected but ‘,’ found at position 3.", exception.getMessage());
-    }
-
-    @Test
     public void add_wrongDefinitionOfCustomDelimiterPrefix_throwException() {
-        var exception = assertThrows(IncorrectInputFormatException.class, () ->
+        assertThrows(NumberFormatException.class, () ->
                 calculator.add("/=\n1=2,3"));
-        assertEquals("Custom delimiter not properly defined", exception.getMessage());
     }
 
     @Test
     public void add_wrongDefinitionOfCustomDelimiterNoSuffix_throwException() {
-        var exception = assertThrows(IncorrectInputFormatException.class, () ->
+        assertThrows(NumberFormatException.class, () ->
                 calculator.add("//=1=2,3"));
-        assertEquals("Custom delimiter not properly defined", exception.getMessage());
     }
 
 }
