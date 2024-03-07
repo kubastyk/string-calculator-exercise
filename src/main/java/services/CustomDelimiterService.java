@@ -14,40 +14,45 @@ public class CustomDelimiterService {
     private static final String DELIMITER_SUFFIX = "\n";
     private static final String ESCAPE_SPECIAL_CHAR = "\\";
 
-    public static List<Integer> split(String text) throws IncorrectInputFormatException {
-        String[] numbers = splitWithDelimiter(text);
+    public static List<Integer> split(String inut) throws IncorrectInputFormatException {
+        String delimiter = DEFAULT_DELIMITERS;
+        if(inut.startsWith(DELIMITER_PREFIX) && inut.contains(DELIMITER_SUFFIX)) {
+            delimiter = getCustomDelimiter(inut);
+            inut = getInputWithoutCustomDelimiterDefinition(inut, delimiter);
 
+            InputValidationService.validateInputWithCustomDelimiter(inut, delimiter);
+        }
+
+        String[] numbers = splitWithDelimiter(inut, delimiter);
         return Arrays.stream(numbers)
                     .mapToInt(Integer::parseInt)
                     .boxed()
                     .collect(toList());
     }
 
-    private static String[] splitWithDelimiter(String text) throws IncorrectInputFormatException {
-        String delimiter = DEFAULT_DELIMITERS;
-        if(text.startsWith(DELIMITER_PREFIX) && text.contains(DELIMITER_SUFFIX)) {
-            delimiter = getCustomDelimiter(text);
-            text = removeDefinitionOfCustomDelimiterFromTextBody(text, delimiter);
-            if(delimiter.isEmpty())
-                delimiter = DEFAULT_DELIMITERS;
-
-            for (char chr : text.toCharArray()) {
-                if(!(Character.isDigit(chr) || chr == delimiter.charAt(0))) {
-                    System.out.println("Throw");
-                    throw new IncorrectInputFormatException("'" + delimiter + "' expected but '" + chr + "' found at position " + text.indexOf(chr) + ".");
-                }
-            }
-        }
+    private static String[] splitWithDelimiter(String input, String delimiter) {
         String delimiterForSplit = delimiter.length() == 1 && delimiter.matches("[^a-zA-Z0-9 ]")
                 ? ESCAPE_SPECIAL_CHAR + delimiter : delimiter;
-        return text.split(delimiterForSplit);
+        return input.split(delimiterForSplit);
     }
 
     private static String getCustomDelimiter(String str) {
+        String customDelimiter = extractCustomDelimiter(str);
+        if(customDelimiter.isEmpty())
+            customDelimiter = DEFAULT_DELIMITERS;
+
+        return customDelimiter;
+    }
+
+    private static String getInputWithoutCustomDelimiterDefinition(String str, String delimiter) {
+        return removeDefinitionOfCustomDelimiter(str, delimiter);
+    }
+
+    private static String extractCustomDelimiter(String str) {
         return str.substring(DELIMITER_PREFIX.length(), str.indexOf(DELIMITER_SUFFIX));
     }
 
-    private static String removeDefinitionOfCustomDelimiterFromTextBody(String text, String delimiter) {
-        return text.substring(DELIMITER_PREFIX.length() + delimiter.length() + DELIMITER_SUFFIX.length());
+    private static String removeDefinitionOfCustomDelimiter(String input, String delimiter) {
+        return input.substring(DELIMITER_PREFIX.length() + delimiter.length() + DELIMITER_SUFFIX.length());
     }
 }
