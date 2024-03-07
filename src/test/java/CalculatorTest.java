@@ -2,6 +2,9 @@ import exceptions.IncorrectInputFormatException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -73,4 +76,45 @@ class CalculatorTest {
         int result = calculator.add("1,2\n3");
         assertEquals(6, result);
     }
+
+    @Test
+    public void add_properlyDefinedCustomDelimiter_returnListOfNumbers() {
+        int result = calculator.add("//aaa\n1aaa2aaa3");
+        int result2 = calculator.add("//.\n1.2.3");
+        int result3 = calculator.add("// \n1 2 3");
+        int result4 = calculator.add("//9\n19293");
+
+
+        assertEquals(6, result);
+        assertEquals(6, result2);
+        assertEquals(6, result3);
+        assertEquals(6, result4);
+    }
+
+    @Test
+    public void add_specialSignDelimiterNoMatch_throwException() {
+        assertThrows(NumberFormatException.class, () ->
+                calculator.add("//=\n1w2w3"));
+    }
+
+    @Test
+    public void add_specialSignDelimiterOneMatch_throwException() {
+        assertThrows(NumberFormatException.class, () ->
+                calculator.add("//=\n1=2,3"));
+    }
+
+    @Test
+    public void add_wrongDefinitionOfCustomDelimiterPrefix_throwException() {
+        var exception = assertThrows(IncorrectInputFormatException.class, () ->
+                calculator.add("/=\n1=2,3"));
+        assertEquals("Custom delimiter not properly defined", exception.getMessage());
+    }
+
+    @Test
+    public void add_wrongDefinitionOfCustomDelimiterNoSuffix_throwException() {
+        var exception = assertThrows(IncorrectInputFormatException.class, () ->
+                calculator.add("//=1=2,3"));
+        assertEquals("Custom delimiter not properly defined", exception.getMessage());
+    }
+
 }
