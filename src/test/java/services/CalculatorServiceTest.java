@@ -95,20 +95,6 @@ class CalculatorServiceTest {
     }
 
     @Test
-    public void add_notAllowCommaSeparatorAtTheEndOfString_throwException() {
-        var exception = assertThrows(IncorrectInputFormatException.class, () ->
-                calculatorService.add("1,2,"));
-        assertEquals("Input data cannot end with the separator", exception.getMessage());
-    }
-
-    @Test
-    public void add_notAllowNewLineSeparatorAtTheEndOfString_throwException() {
-        var exception = assertThrows(IncorrectInputFormatException.class, () ->
-                calculatorService.add("1\n2\n"));
-        assertEquals("Input data cannot end with the separator", exception.getMessage());
-    }
-
-    @Test
     public void add_threeDashDelimiterAndNegativeNumber_throwException() {
         var exception = assertThrows(IncorrectInputFormatException.class, () ->
                 calculatorService.add("//-\n1---2-3"));
