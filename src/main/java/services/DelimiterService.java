@@ -1,7 +1,7 @@
 package services;
 
 import exceptions.IncorrectInputFormatException;
-import models.CalculatorData;
+import models.CalculationData;
 
 import java.util.Arrays;
 import java.util.List;
@@ -13,20 +13,20 @@ public class DelimiterService {
     public static final String DEFAULT_DELIMITERS = ",|\n";
     private static final String ESCAPE_SPECIAL_CHAR = "\\";
 
-    public static List<Integer> extractNumbers(CalculatorData calculatorData) throws IncorrectInputFormatException {
-        InputValidationService.validateInputWithCustomDelimiter(calculatorData);
+    public static List<Integer> extractNumbers(CalculationData calculationData) throws IncorrectInputFormatException {
+        InputValidationService.validateInputWithCustomDelimiter(calculationData);
 
-        String[] numbers = splitWithDelimiter(calculatorData);
+        String[] numbers = splitWithDelimiter(calculationData);
         return Arrays.stream(numbers)
                 .mapToInt(Integer::parseInt)
                 .boxed()
                 .collect(toList());
     }
 
-    private static String[] splitWithDelimiter(CalculatorData calculatorData) {
-        String delimiter = calculatorData.delimiter();
+    private static String[] splitWithDelimiter(CalculationData calculationData) {
+        String delimiter = calculationData.delimiter();
         String delimiterForSplit = delimiter.length() == 1 && delimiter.matches("[^a-zA-Z0-9 ]")
                 ? ESCAPE_SPECIAL_CHAR + delimiter : delimiter;
-        return calculatorData.numbers().split(delimiterForSplit);
+        return calculationData.numbers().split(delimiterForSplit);
     }
 }

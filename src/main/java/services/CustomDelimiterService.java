@@ -1,20 +1,20 @@
 package services;
 
-import models.CalculatorData;
+import models.CalculationData;
 
 public class CustomDelimiterService {
 
     private static final String DELIMITER_PREFIX = "//";
     private static final String DELIMITER_SUFFIX = "\n";
 
-    public static CalculatorData split(String input) {
+    public static CalculationData split(String input) {
         String delimiter = DelimiterService.DEFAULT_DELIMITERS;
         if(checkIfContainsCustomDelimiterDefinition(input)) {
             delimiter = getCustomDelimiter(input);
             input = getInputWithoutCustomDelimiterDefinition(input, delimiter);
         }
 
-        return new CalculatorData(input, delimiter);
+        return new CalculationData(input, delimiter);
     }
 
     public static boolean checkIfContainsCustomDelimiterDefinition(String input) {

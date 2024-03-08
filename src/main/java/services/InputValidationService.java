@@ -1,7 +1,7 @@
 package services;
 
 import exceptions.IncorrectInputFormatException;
-import models.CalculatorData;
+import models.CalculationData;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,11 +16,11 @@ public class InputValidationService {
             throw new IncorrectInputFormatException("Input data cannot end with the separator");
     }
 
-    public static void validateInputWithCustomDelimiter(CalculatorData calculatorData) throws IncorrectInputFormatException {
-        for (char chr : calculatorData.numbers().toCharArray()) {
-            if(!(Character.isDigit(chr) || chr == calculatorData.delimiter().charAt(0))) {
+    public static void validateInputWithCustomDelimiter(CalculationData calculationData) throws IncorrectInputFormatException {
+        for (char chr : calculationData.numbers().toCharArray()) {
+            if(!(Character.isDigit(chr) || chr == calculationData.delimiter().charAt(0))) {
                 throw new IncorrectInputFormatException("'%s' expected but '%s' found at position %s."
-                        .formatted(calculatorData.delimiter(), chr, calculatorData.numbers().indexOf(chr)));
+                        .formatted(calculationData.delimiter(), chr, calculationData.numbers().indexOf(chr)));
             }
         }
     }

@@ -1,7 +1,7 @@
 package services;
 
 import exceptions.IncorrectInputFormatException;
-import models.CalculatorData;
+import models.CalculationData;
 
 import java.util.Arrays;
 import java.util.List;
@@ -37,8 +37,8 @@ public class CalculatorService {
         return result;
     }
 
-    private CalculatorData getCalculationData(String input) {
-        var calculatorData = new CalculatorData(input, DelimiterService.DEFAULT_DELIMITERS);
+    private CalculationData getCalculationData(String input) {
+        var calculatorData = new CalculationData(input, DelimiterService.DEFAULT_DELIMITERS);
         if (CustomDelimiterService.checkIfContainsCustomDelimiterDefinition(input)) {
             calculatorData = CustomDelimiterService.split(input);
         }
