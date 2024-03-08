@@ -9,6 +9,8 @@ import java.util.List;
 
 public class Calculator {
 
+    private static final int ADD_MAX_LIMIT = 1000;
+
     public int add(String... args) {
         return Arrays.stream(args).mapToInt(this::add).sum();
     }
@@ -29,6 +31,7 @@ public class Calculator {
             List<Integer> splitNumbers = DelimiterService.extractNumbers(calculatorData);
 
             result = splitNumbers.stream()
+                    .filter(num -> num <= ADD_MAX_LIMIT)
                     .reduce(0, Integer::sum);
         } catch (IncorrectInputFormatException e) {
             System.out.println(e.getMessage());
