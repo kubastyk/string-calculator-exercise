@@ -15,7 +15,6 @@ public class DelimiterService {
 
     public static List<Integer> extractNumbers(CalculatorData calculatorData) throws IncorrectInputFormatException {
         InputValidationService.validateInputWithCustomDelimiter(calculatorData);
-        InputValidationService.validateInputWithCustomDelimiter(calculatorData);
 
         String[] numbers = splitWithDelimiter(calculatorData);
         return Arrays.stream(numbers)

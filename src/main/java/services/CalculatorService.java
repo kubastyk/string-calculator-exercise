@@ -27,9 +27,10 @@ public class CalculatorService {
             if (CustomDelimiterService.checkIfContainsCustomDelimiterDefinition(numbers)) {
                 calculatorData = CustomDelimiterService.split(numbers);
             }
-            List<Integer> splitNumbers = DelimiterService.extractNumbers(calculatorData);
+            List<Integer> extractedNumbers = DelimiterService.extractNumbers(calculatorData);
+            InputValidationService.verifyNegativeNumbers(extractedNumbers);
 
-            result = splitNumbers.stream()
+            result = extractedNumbers.stream()
                     .filter(num -> num <= ADD_MAX_LIMIT)
                     .reduce(0, Integer::sum);
         } catch (IncorrectInputFormatException e) {
