@@ -4,6 +4,7 @@ import exceptions.IncorrectInputFormatException;
 import models.CalculationData;
 
 import java.util.List;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class InputValidationService {
@@ -18,10 +19,14 @@ public class InputValidationService {
 
     public static void validateSplittingInputByDelimiter(CalculationData calculationData) throws IncorrectInputFormatException {
         for (char chr : calculationData.numbers().toCharArray()) {
-            if(!(Character.isDigit(chr) || chr == calculationData.delimiter().charAt(0))) {
+            if(!(Character.isDigit(chr) || chr == calculationData.delimiter().charAt(0) || chr == '-')) {
                 throw new IncorrectInputFormatException("'%s' expected but '%s' found at position %s."
                         .formatted(calculationData.delimiter(), chr, calculationData.numbers().indexOf(chr)));
             }
+        }
+
+        if(calculationData.delimiter().equals("-") && Pattern.matches("\\S+[-]{3,}\\S+", calculationData.numbers())) {//pm for morre then 2
+            throw new IncorrectInputFormatException("'-' expected but multiple '-' found");
         }
     }
 
