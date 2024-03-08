@@ -19,22 +19,18 @@ public class CalculatorService {
     }
 
     public int add(String numbers) throws IncorrectInputFormatException {
-        int result = 0;
-
         if(numbers.length() == 0)
             return 0;
 
         InputValidationService.verifyIfInputEndsWithDelimiter(numbers);
-        var calculatorData = getCalculationData(numbers);
+        var calculationData = getCalculationData(numbers);
 
-        List<Integer> extractedNumbers = DelimiterService.extractNumbers(calculatorData);
+        List<Integer> extractedNumbers = DelimiterService.extractNumbers(calculationData);
         InputValidationService.verifyNegativeNumbers(extractedNumbers);
 
-        result = extractedNumbers.stream()
+        return extractedNumbers.stream()
                 .filter(num -> num <= ADD_MAX_LIMIT)
                 .reduce(0, Integer::sum);
-
-        return result;
     }
 
     private CalculationData getCalculationData(String input) {
