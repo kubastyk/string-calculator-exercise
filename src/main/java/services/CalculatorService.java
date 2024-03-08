@@ -1,13 +1,12 @@
+package services;
+
 import exceptions.IncorrectInputFormatException;
 import models.CalculatorData;
-import services.CustomDelimiterService;
-import services.DelimiterService;
-import services.InputValidationService;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class Calculator {
+public class CalculatorService {
 
     private static final int ADD_MAX_LIMIT = 1000;
 
