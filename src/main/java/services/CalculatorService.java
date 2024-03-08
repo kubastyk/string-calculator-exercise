@@ -3,36 +3,36 @@ package services;
 import exceptions.IncorrectInputFormatException;
 import models.CalculationData;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class CalculatorService {
 
     private static final int ADD_MAX_LIMIT = 1000;
 
-    public int add(String... args) {
-        return Arrays.stream(args).mapToInt(this::add).sum();
+    public int add(String... args) throws IncorrectInputFormatException {
+        int result = 0;
+        for(String arg : args) {
+            result += add(arg);
+        }
+
+        return result;
     }
 
-    public int add(String numbers) {
+    public int add(String numbers) throws IncorrectInputFormatException {
         int result = 0;
 
-        try {
-            if(numbers.length() == 0)
-                return 0;
+        if(numbers.length() == 0)
+            return 0;
 
-            InputValidationService.verifyIfInputEndsWithDelimiter(numbers);
-            var calculatorData = getCalculationData(numbers);
+        InputValidationService.verifyIfInputEndsWithDelimiter(numbers);
+        var calculatorData = getCalculationData(numbers);
 
-            List<Integer> extractedNumbers = DelimiterService.extractNumbers(calculatorData);
-            InputValidationService.verifyNegativeNumbers(extractedNumbers);
+        List<Integer> extractedNumbers = DelimiterService.extractNumbers(calculatorData);
+        InputValidationService.verifyNegativeNumbers(extractedNumbers);
 
-            result = extractedNumbers.stream()
-                    .filter(num -> num <= ADD_MAX_LIMIT)
-                    .reduce(0, Integer::sum);
-        } catch (IncorrectInputFormatException e) {
-            System.out.println(e.getMessage());
-        }
+        result = extractedNumbers.stream()
+                .filter(num -> num <= ADD_MAX_LIMIT)
+                .reduce(0, Integer::sum);
 
         return result;
     }
