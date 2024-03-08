@@ -4,7 +4,7 @@ import exceptions.IncorrectInputFormatException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 class CalculatorServiceTest {
 
@@ -60,6 +60,20 @@ class CalculatorServiceTest {
     }
 
     @Test
+    public void add_specialSignDelimiterNoMatch_throwException() {
+        var exception = assertThrows(IncorrectInputFormatException.class, () ->
+                calculatorService.add("//=\n1w2w3"));
+        assertEquals("'=' expected but 'w' found at position 1.", exception.getMessage());
+    }
+
+    @Test
+    public void add_specialSignDelimiterOneMatch_throwException() {
+        var exception = assertThrows(IncorrectInputFormatException.class, () ->
+                calculatorService.add("//|\n1|2,3"));
+        assertEquals("'|' expected but ',' found at position 3.", exception.getMessage());
+    }
+
+    @Test
     public void add_testIfNumberBiggerThanLimitIsIgnored_sumWithoutNumberOverLimit() throws IncorrectInputFormatException {
         int result = calculatorService.add("1,2,3,1001");
 
@@ -80,5 +94,38 @@ class CalculatorServiceTest {
         assertEquals(0, result);
     }
 
+    @Test
+    public void add_notAllowCommaSeparatorAtTheEndOfString_throwException() {
+        var exception = assertThrows(IncorrectInputFormatException.class, () ->
+                calculatorService.add("1,2,"));
+        assertEquals("Input data cannot end with the separator", exception.getMessage());
+    }
 
+    @Test
+    public void add_notAllowNewLineSeparatorAtTheEndOfString_throwException() {
+        var exception = assertThrows(IncorrectInputFormatException.class, () ->
+                calculatorService.add("1\n2\n"));
+        assertEquals("Input data cannot end with the separator", exception.getMessage());
+    }
+
+    @Test
+    public void add_threeDashDelimiterAndNegativeNumber_throwException() {
+        var exception = assertThrows(IncorrectInputFormatException.class, () ->
+                calculatorService.add("//-\n1---2-3"));
+        assertEquals("'-' expected but multiple '-' found", exception.getMessage());
+    }
+
+    @Test
+    public void add_inputContainsOneNegativeNumbers_throwException() {
+        var exception = assertThrows(IncorrectInputFormatException.class, () ->
+                calculatorService.add("1,-2,3"));
+        assertEquals("Negative number(s) not allowed: -2", exception.getMessage());
+    }
+
+    @Test
+    public void add_inputContainsMultipleNegativeNumbers_throwException() {
+        var exception = assertThrows(IncorrectInputFormatException.class, () ->
+                calculatorService.add("1,-2,-3,-4"));
+        assertEquals("Negative number(s) not allowed: -2, -3, -4", exception.getMessage());
+    }
 }
