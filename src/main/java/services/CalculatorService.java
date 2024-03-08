@@ -4,6 +4,7 @@ import exceptions.IncorrectInputFormatException;
 import models.CalculationData;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class CalculatorService {
@@ -11,12 +12,7 @@ public class CalculatorService {
     private static final int ADD_MAX_LIMIT = 1000;
 
     public int add(String... args) {
-        int result = 0;
-        for(String arg : args) {
-            result += add(arg);
-        }
-
-        return result;
+        return Arrays.stream(args).mapToInt(this::add).sum();
     }
 
     public int add(String input) {
