@@ -3,13 +3,14 @@ package services;
 import exceptions.IncorrectInputFormatException;
 import models.CalculationData;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CalculatorService {
 
     private static final int ADD_MAX_LIMIT = 1000;
 
-    public int add(String... args) throws IncorrectInputFormatException {
+    public int add(String... args) {
         int result = 0;
         for(String arg : args) {
             result += add(arg);
@@ -18,19 +19,29 @@ public class CalculatorService {
         return result;
     }
 
-    public int add(String numbers) throws IncorrectInputFormatException {
-        if(numbers.length() == 0)
+    public int add(String input) {
+        if(input.length() == 0)
             return 0;
 
-        var calculationData = getCalculationData(numbers);
-        verifyIfInputEndsWithDelimiter(calculationData);
-
-        List<Integer> extractedNumbers = DelimiterService.extractNumbers(calculationData);
-        InputValidationService.verifyNegativeNumbers(extractedNumbers);
-
+        List<Integer> extractedNumbers = extractAndValidateData(input);
         return extractedNumbers.stream()
                 .filter(num -> num <= ADD_MAX_LIMIT)
                 .reduce(0, Integer::sum);
+    }
+
+    private List<Integer> extractAndValidateData(String input) {
+        var extractedNumbers = new ArrayList<Integer>();
+        try {
+            var calculationData = getCalculationData(input);
+            verifyIfInputEndsWithDelimiter(calculationData);
+
+            extractedNumbers = (ArrayList<Integer>) DelimiterService.extractNumbers(calculationData);
+            InputValidationService.verifyNegativeNumbers(extractedNumbers);
+        } catch (IncorrectInputFormatException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return extractedNumbers;
     }
 
     private CalculationData getCalculationData(String input) {
