@@ -13,7 +13,7 @@ public class DelimiterService {
     public static final String DEFAULT_DELIMITERS = ",|\n";
     private static final String ESCAPE_SPECIAL_CHAR = "\\";
 
-    public static List<Integer> getNumbers(CalculatorData calculatorData) throws IncorrectInputFormatException {
+    public static List<Integer> extractNumbers(CalculatorData calculatorData) throws IncorrectInputFormatException {
         InputValidationService.validateInputWithCustomDelimiter(calculatorData);
         InputValidationService.validateInputWithCustomDelimiter(calculatorData);
 

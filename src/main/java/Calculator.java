@@ -26,7 +26,7 @@ public class Calculator {
             if (CustomDelimiterService.checkIfContainsCustomDelimiterDefinition(numbers)) {
                 calculatorData = CustomDelimiterService.split(numbers);
             }
-            List<Integer> splitNumbers = DelimiterService.getNumbers(calculatorData);
+            List<Integer> splitNumbers = DelimiterService.extractNumbers(calculatorData);
 
             result = splitNumbers.stream()
                     .reduce(0, Integer::sum);

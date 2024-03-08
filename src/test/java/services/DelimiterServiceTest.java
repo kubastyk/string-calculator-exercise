@@ -14,10 +14,10 @@ class DelimiterServiceTest {
 
     @Test
     public void getNumbers_properlyDefinedCustomDelimiter_returnListOfNumbers() throws IncorrectInputFormatException {
-        var result = DelimiterService.getNumbers(new CalculatorData("1aaa2aaa3", "aaa"));
-        var result2 = DelimiterService.getNumbers(new CalculatorData("1,2,3", ","));
-        var result3 = DelimiterService.getNumbers(new CalculatorData("1 2 3", " "));
-        var result4 = DelimiterService.getNumbers(new CalculatorData("19293", "9"));
+        var result = DelimiterService.extractNumbers(new CalculatorData("1aaa2aaa3", "aaa"));
+        var result2 = DelimiterService.extractNumbers(new CalculatorData("1,2,3", ","));
+        var result3 = DelimiterService.extractNumbers(new CalculatorData("1 2 3", " "));
+        var result4 = DelimiterService.extractNumbers(new CalculatorData("19293", "9"));
 
         List<Integer> expectedList = Arrays.asList(1, 2, 3);
         assertEquals(expectedList, result);
@@ -28,7 +28,7 @@ class DelimiterServiceTest {
 
     @Test
     public void getNumbers_properlyDefinedCustomDelimiterSpecialChar_returnListOfNumbers() throws IncorrectInputFormatException {
-        var result = DelimiterService.getNumbers(new CalculatorData("1|2|3", "|"));
+        var result = DelimiterService.extractNumbers(new CalculatorData("1|2|3", "|"));
 
         assertEquals(Arrays.asList(1, 2, 3), result);
     }
@@ -36,14 +36,14 @@ class DelimiterServiceTest {
     @Test
     public void getNumbers_specialSignDelimiterNoMatch_throwException() {
         var exception = assertThrows(IncorrectInputFormatException.class, () ->
-                DelimiterService.getNumbers(new CalculatorData("1w2w3", "=")));
+                DelimiterService.extractNumbers(new CalculatorData("1w2w3", "=")));
         assertEquals("'=' expected but 'w' found at position 1.", exception.getMessage());
     }
 
     @Test
     public void getNumbers_specialSignDelimiterOneMatch_throwException() {
         var exception = assertThrows(IncorrectInputFormatException.class, () ->
-                DelimiterService.getNumbers(new CalculatorData("1|2,3", "|")));
+                DelimiterService.extractNumbers(new CalculatorData("1|2,3", "|")));
         assertEquals("'|' expected but ',' found at position 3.", exception.getMessage());
     }
 
