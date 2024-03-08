@@ -14,7 +14,7 @@ public class DelimiterService {
     private static final String ESCAPE_SPECIAL_CHAR = "\\";
 
     public static List<Integer> extractNumbers(CalculationData calculationData) throws IncorrectInputFormatException {
-        InputValidationService.validateInputWithCustomDelimiter(calculationData);
+        InputValidationService.validateSplittingInputByDelimiter(calculationData);
 
         String[] numbers = splitWithDelimiter(calculationData);
         return Arrays.stream(numbers)

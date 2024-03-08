@@ -16,7 +16,7 @@ public class InputValidationService {
             throw new IncorrectInputFormatException("Input data cannot end with the separator");
     }
 
-    public static void validateInputWithCustomDelimiter(CalculationData calculationData) throws IncorrectInputFormatException {
+    public static void validateSplittingInputByDelimiter(CalculationData calculationData) throws IncorrectInputFormatException {
         for (char chr : calculationData.numbers().toCharArray()) {
             if(!(Character.isDigit(chr) || chr == calculationData.delimiter().charAt(0))) {
                 throw new IncorrectInputFormatException("'%s' expected but '%s' found at position %s."
