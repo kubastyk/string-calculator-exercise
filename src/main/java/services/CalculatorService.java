@@ -22,11 +22,8 @@ public class CalculatorService {
                 return 0;
 
             InputValidationService.verifyIfInputEndsWithDelimiter(numbers);
+            var calculatorData = getCalculationData(numbers);
 
-            var calculatorData = new CalculatorData(numbers, DelimiterService.DEFAULT_DELIMITERS);
-            if (CustomDelimiterService.checkIfContainsCustomDelimiterDefinition(numbers)) {
-                calculatorData = CustomDelimiterService.split(numbers);
-            }
             List<Integer> extractedNumbers = DelimiterService.extractNumbers(calculatorData);
             InputValidationService.verifyNegativeNumbers(extractedNumbers);
 
@@ -38,5 +35,14 @@ public class CalculatorService {
         }
 
         return result;
+    }
+
+    private CalculatorData getCalculationData(String input) {
+        var calculatorData = new CalculatorData(input, DelimiterService.DEFAULT_DELIMITERS);
+        if (CustomDelimiterService.checkIfContainsCustomDelimiterDefinition(input)) {
+            calculatorData = CustomDelimiterService.split(input);
+        }
+
+        return calculatorData;
     }
 }
