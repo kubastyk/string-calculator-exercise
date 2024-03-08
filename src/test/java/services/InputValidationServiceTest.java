@@ -4,6 +4,8 @@ import exceptions.IncorrectInputFormatException;
 import models.CalculatorData;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class InputValidationServiceTest {
@@ -39,5 +41,24 @@ class InputValidationServiceTest {
     @Test
     public void validateInputWithCustomDelimiter_specialSignDelimiterAllMatch_notThrowException() {
         assertDoesNotThrow(() -> InputValidationService.validateInputWithCustomDelimiter(new CalculatorData("1|2|3", "|")));
+    }
+
+    @Test
+    public void verifyNegativeNumbers_inputContainsOneNegativeNumbers_throwException() {
+        var exception = assertThrows(IncorrectInputFormatException.class, () ->
+                InputValidationService.verifyNegativeNumbers(Arrays.asList(1,-2,3)));
+        assertEquals("Negative number(s) not allowed: -2", exception.getMessage());
+    }
+
+    @Test
+    public void verifyNegativeNumbers_inputContainsMultipleNegativeNumbers_throwException() {
+        var exception = assertThrows(IncorrectInputFormatException.class, () ->
+                InputValidationService.verifyNegativeNumbers(Arrays.asList(1,-2,-3,-4)));
+        assertEquals("Negative number(s) not allowed: -2, -3, -4", exception.getMessage());
+    }
+
+    @Test
+    public void verifyNegativeNumbers_inputContainsOnlyPositiveNumbers_notThrowException() {
+        assertDoesNotThrow(() -> InputValidationService.verifyNegativeNumbers(Arrays.asList(1,2,3)));
     }
 }
