@@ -29,6 +29,6 @@ public class DelimiterService {
         String delimiter = calculationData.delimiter();
         String delimiterForSplit = delimiter.length() == 1 && delimiter.matches("[^a-zA-Z0-9 ]")
                 ? ESCAPE_SPECIAL_CHAR + delimiter : delimiter;
-        return calculationData.numbers().split(delimiterForSplit);
+        return calculationData.input().split(delimiterForSplit);
     }
 }

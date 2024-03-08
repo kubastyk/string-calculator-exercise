@@ -1,3 +1,3 @@
 package models;
 
-public record CalculationData(String numbers, String delimiter) { }
+public record CalculationData(String input, String delimiter) { }
