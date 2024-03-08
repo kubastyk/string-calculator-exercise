@@ -13,14 +13,21 @@ class InputValidationServiceTest {
     @Test
     public void verifyIfInputEndsWithDelimiter_notAllowCommaSeparatorAtTheEndOfString_throwException() {
         var exception = assertThrows(IncorrectInputFormatException.class, () ->
-                InputValidationService.verifyIfInputEndsWithDelimiter("1,2,"));
+                InputValidationService.verifyIfInputEndsWithDelimiter(new CalculationData("1,2,", DelimiterService.DEFAULT_DELIMITERS)));
         assertEquals("Input data cannot end with the separator", exception.getMessage());
     }
 
     @Test
     public void verifyIfInputEndsWithDelimiter_notAllowNewLineSeparatorAtTheEndOfString_throwException() {
         var exception = assertThrows(IncorrectInputFormatException.class, () ->
-                InputValidationService.verifyIfInputEndsWithDelimiter("1\n2\n"));
+                InputValidationService.verifyIfInputEndsWithDelimiter(new CalculationData("1\n2\n", DelimiterService.DEFAULT_DELIMITERS)));
+        assertEquals("Input data cannot end with the separator", exception.getMessage());
+    }
+
+    @Test
+    public void verifyIfInputEndsWithDelimiter_notAllowCustomDelimiterAtTheEndOfString_throwException() {
+        var exception = assertThrows(IncorrectInputFormatException.class, () ->
+                InputValidationService.verifyIfInputEndsWithDelimiter(new CalculationData("1|2|", "|")));
         assertEquals("Input data cannot end with the separator", exception.getMessage());
     }
 
