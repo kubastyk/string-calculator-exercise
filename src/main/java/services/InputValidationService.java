@@ -22,7 +22,8 @@ public class InputValidationService {
         }
     }
 
-    public static void validateSplittingInputByDelimiter(CalculationData calculationData) throws IncorrectInputFormatException {
+    public static void validateSplittingInputByDelimiter(CalculationData calculationData)
+            throws IncorrectInputFormatException {
         for (char chr : calculationData.numbers().toCharArray()) {
             if(!(Character.isDigit(chr) || chr == calculationData.delimiter().charAt(0) || chr == '-')) {
                 throw new IncorrectInputFormatException("'%s' expected but '%s' found at position %s."
@@ -30,7 +31,8 @@ public class InputValidationService {
             }
         }
 
-        if(calculationData.delimiter().equals("-") && Pattern.matches("\\S+[-]{3,}\\S+", calculationData.numbers())) {//pm for morre then 2
+        if(calculationData.delimiter().equals("-")
+                && Pattern.matches("\\S+[-]{3,}\\S+", calculationData.numbers())) {
             throw new IncorrectInputFormatException("'-' expected but multiple '-' found");
         }
     }
