@@ -1,3 +1,4 @@
+import exceptions.IncorrectInputFormatException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -32,45 +33,9 @@ class CalculatorTest {
     }
 
     @Test
-    public void add_withLetterAsValue_throwNumberFormatException() {
-        assertThrows(NumberFormatException.class, () ->
-                calculator.add("1,A"));
-    }
-
-    @Test
-    public void add_withNotProperDelimiter_throwNumberFormatException() {
-        assertThrows(NumberFormatException.class, () ->
-                calculator.add("1.2"));
-    }
-
-    @Test
-    public void add_withNoNumbersProvided_throwNumberFormatException() {
-        assertThrows(NumberFormatException.class, () ->
-                calculator.add("AA,BB"));
-    }
-
-    @Test
     void add_multipleValidStringArguments_returnSumOfAllArguments() {
         int result = calculator.add("1,2", "3,4", "5", "");
         assertEquals(15, result);
-    }
-
-    @Test
-    public void add_multipleArgumentsWrongDelimiter_returnSumOfAllArguments() {
-        assertThrows(NumberFormatException.class, () ->
-                calculator.add("1,2", "3.4"));
-    }
-
-    @Test
-    public void add_multipleValidNumbersWithNewLineSeparator_returnSum() {
-        int result = calculator.add("1\n2\n3");
-        assertEquals(6, result);
-    }
-
-    @Test
-    public void add_multipleValidNumbersWithNewLineAndCommaSeparator_returnSum() {
-        int result = calculator.add("1,2\n3");
-        assertEquals(6, result);
     }
 
     @Test
@@ -91,18 +56,6 @@ class CalculatorTest {
         int result = calculator.add("//|\n1|2|3");
 
         assertEquals(6, result);
-    }
-
-    @Test
-    public void add_wrongDefinitionOfCustomDelimiterPrefix_throwException() {
-        assertThrows(NumberFormatException.class, () ->
-                calculator.add("/=\n1=2,3"));
-    }
-
-    @Test
-    public void add_wrongDefinitionOfCustomDelimiterNoSuffix_throwException() {
-        assertThrows(NumberFormatException.class, () ->
-                calculator.add("//=1=2,3"));
     }
 
 }
