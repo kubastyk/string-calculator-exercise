@@ -56,4 +56,26 @@ class CalculatorTest {
         assertEquals(6, result);
     }
 
+    @Test
+    public void add_testIfNumberBiggerThanLimitIsIgnored_sumWithoutNumberOverLimit() {
+        int result = calculator.add("1,2,3,1001");
+
+        assertEquals(6, result);
+    }
+
+    @Test
+    public void add_testEdgeCaseForMaxLimit_sumWithNumberOverLimit() {
+        int result = calculator.add("1000");
+
+        assertEquals(1000, result);
+    }
+
+    @Test
+    public void add_testMaxValueOneOverLimitValue_sumReturnZero() {
+        int result = calculator.add("1001");
+
+        assertEquals(0, result);
+    }
+
+
 }
