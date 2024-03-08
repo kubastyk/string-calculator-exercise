@@ -1,6 +1,7 @@
 package services;
 
 import exceptions.IncorrectInputFormatException;
+import models.CalculatorData;
 
 import java.util.Arrays;
 import java.util.List;
@@ -9,31 +10,40 @@ import static java.util.stream.Collectors.toList;
 
 public class CustomDelimiterService {
 
-    private static final String DEFAULT_DELIMITERS = ",|\n";
+    public static final String DEFAULT_DELIMITERS = ",|\n";
     private static final String DELIMITER_PREFIX = "//";
     private static final String DELIMITER_SUFFIX = "\n";
     private static final String ESCAPE_SPECIAL_CHAR = "\\";
 
-    public static List<Integer> split(String input) throws IncorrectInputFormatException {
+    public static CalculatorData split(String input) {
         String delimiter = DEFAULT_DELIMITERS;
-        if(input.startsWith(DELIMITER_PREFIX) && input.contains(DELIMITER_SUFFIX)) {
+        if(checkIfContainsCustomDelimiterDefinition(input)) {
             delimiter = getCustomDelimiter(input);
             input = getInputWithoutCustomDelimiterDefinition(input, delimiter);
-
-            InputValidationService.validateInputWithCustomDelimiter(input, delimiter);
         }
 
-        String[] numbers = splitWithDelimiter(input, delimiter);
+        return new CalculatorData(input, delimiter);
+    }
+
+    public static List<Integer> getNumbers(CalculatorData calculatorData) throws IncorrectInputFormatException {
+        InputValidationService.validateInputWithCustomDelimiter(calculatorData);
+
+        String[] numbers = splitWithDelimiter(calculatorData);
         return Arrays.stream(numbers)
                     .mapToInt(Integer::parseInt)
                     .boxed()
                     .collect(toList());
     }
 
-    private static String[] splitWithDelimiter(String input, String delimiter) {
+    public static boolean checkIfContainsCustomDelimiterDefinition(String input) {
+        return input.startsWith(DELIMITER_PREFIX) && input.contains(DELIMITER_SUFFIX);
+    }
+
+    private static String[] splitWithDelimiter(CalculatorData calculatorData) {
+        String delimiter = calculatorData.delimiter();
         String delimiterForSplit = delimiter.length() == 1 && delimiter.matches("[^a-zA-Z0-9 ]")
                 ? ESCAPE_SPECIAL_CHAR + delimiter : delimiter;
-        return input.split(delimiterForSplit);
+        return calculatorData.numbers().split(delimiterForSplit);
     }
 
     private static String getCustomDelimiter(String str) {

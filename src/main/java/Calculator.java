@@ -1,4 +1,5 @@
 import exceptions.IncorrectInputFormatException;
+import models.CalculatorData;
 import services.CustomDelimiterService;
 import services.InputValidationService;
 
@@ -19,9 +20,14 @@ public class Calculator {
                 return 0;
 
             InputValidationService.verifyIfInputEndsWithDelimiter(numbers);
-            List<Integer> splitNumbers = CustomDelimiterService.split(numbers);
 
-            result =splitNumbers.stream()
+            var calculatorData = new CalculatorData(numbers, CustomDelimiterService.DEFAULT_DELIMITERS);
+            if (CustomDelimiterService.checkIfContainsCustomDelimiterDefinition(numbers)) {
+                calculatorData = CustomDelimiterService.split(numbers);
+            }
+            List<Integer> splitNumbers = CustomDelimiterService.getNumbers(calculatorData);
+
+            result = splitNumbers.stream()
                     .reduce(0, Integer::sum);
         } catch (IncorrectInputFormatException e) {
             System.out.println(e.getMessage());

@@ -1,6 +1,7 @@
 package services;
 
 import exceptions.IncorrectInputFormatException;
+import models.CalculatorData;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -24,19 +25,19 @@ class InputValidationServiceTest {
     @Test
     public void validateInputWithCustomDelimiter_specialSignDelimiterNoMatch_throwException() {
         var exception = assertThrows(IncorrectInputFormatException.class, () ->
-                InputValidationService.validateInputWithCustomDelimiter("1w2w3", "="));
+                InputValidationService.validateInputWithCustomDelimiter(new CalculatorData("1w2w3", "=")));
         assertEquals("'=' expected but 'w' found at position 1.", exception.getMessage());
     }
 
     @Test
     public void validateInputWithCustomDelimiter_specialSignDelimiterOneMatch_throwException() {
         var exception = assertThrows(IncorrectInputFormatException.class, () ->
-                InputValidationService.validateInputWithCustomDelimiter("1|2,3", "|"));
+                InputValidationService.validateInputWithCustomDelimiter(new CalculatorData("1|2,3", "|")));
         assertEquals("'|' expected but ',' found at position 3.", exception.getMessage());
     }
 
     @Test
     public void validateInputWithCustomDelimiter_specialSignDelimiterAllMatch_notThrowException() {
-        assertDoesNotThrow(() -> InputValidationService.validateInputWithCustomDelimiter("1|2|3", "|"));
+        assertDoesNotThrow(() -> InputValidationService.validateInputWithCustomDelimiter(new CalculatorData("1|2|3", "|")));
     }
 }
