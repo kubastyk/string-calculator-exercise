@@ -9,12 +9,17 @@ import java.util.stream.Collectors;
 
 public class InputValidationService {
 
-    private static final String COMMA_DELIMITER = ",";
-    private static final String NEW_LINE_DELIMITER = "\n";
+    private static final String END_SEPARATOR_EXCEPTION_MESSAGE = "Input data cannot end with the separator";
 
-    public static void verifyIfInputEndsWithDelimiter(String input) throws IncorrectInputFormatException {
-        if(input.endsWith(COMMA_DELIMITER) || input.endsWith(NEW_LINE_DELIMITER))
-            throw new IncorrectInputFormatException("Input data cannot end with the separator");
+    public static void verifyIfInputEndsWithDelimiter(CalculationData cd) throws IncorrectInputFormatException {
+        if(cd.delimiter().equals(DelimiterService.DEFAULT_DELIMITERS)) {
+            if(cd.numbers().endsWith(DelimiterService.COMMA_DELIMITER)
+                    || cd.numbers().endsWith(DelimiterService.NEW_LINE_DELIMITER)) {
+                throw new IncorrectInputFormatException(END_SEPARATOR_EXCEPTION_MESSAGE);
+            }
+        } else if(cd.numbers().endsWith(cd.delimiter())) {
+            throw new IncorrectInputFormatException(END_SEPARATOR_EXCEPTION_MESSAGE);
+        }
     }
 
     public static void validateSplittingInputByDelimiter(CalculationData calculationData) throws IncorrectInputFormatException {

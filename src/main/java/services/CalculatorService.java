@@ -22,8 +22,8 @@ public class CalculatorService {
         if(numbers.length() == 0)
             return 0;
 
-        InputValidationService.verifyIfInputEndsWithDelimiter(numbers);
         var calculationData = getCalculationData(numbers);
+        verifyIfInputEndsWithDelimiter(calculationData);
 
         List<Integer> extractedNumbers = DelimiterService.extractNumbers(calculationData);
         InputValidationService.verifyNegativeNumbers(extractedNumbers);
@@ -40,5 +40,13 @@ public class CalculatorService {
         }
 
         return calculatorData;
+    }
+
+    private void verifyIfInputEndsWithDelimiter(CalculationData calculationData) {
+        try {
+            InputValidationService.verifyIfInputEndsWithDelimiter(calculationData);
+        } catch (IncorrectInputFormatException e) {
+            System.out.println(e.getMessage());
+        }
     }
 }

@@ -11,6 +11,8 @@ import static java.util.stream.Collectors.toList;
 public class DelimiterService {
 
     public static final String DEFAULT_DELIMITERS = ",|\n";
+    public static final String COMMA_DELIMITER = ",";
+    public static final String NEW_LINE_DELIMITER = "\n";
     private static final String ESCAPE_SPECIAL_CHAR = "\\";
 
     public static List<Integer> extractNumbers(CalculationData calculationData) throws IncorrectInputFormatException {
